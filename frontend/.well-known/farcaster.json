@@ -1,0 +1,15 @@
+{
+  "accountAssociation": { "header": "SIGN_WITH_BASE_BUILD", "payload": "SIGN_WITH_BASE_BUILD", "signature": "SIGN_WITH_BASE_BUILD" },
+  "miniapp": {
+    "version": "1",
+    "name": "BondMark",
+    "homeUrl": "APP_URL/base.html",
+    "iconUrl": "APP_URL/icon.png",
+    "splashImageUrl": "APP_URL/icon.png",
+    "splashBackgroundColor": "#0b0b12",
+    "subtitle": "Bonded sellers, protected deals",
+    "description": "Seller bonds and on-chain dispute resolution for social commerce.",
+    "primaryCategory": "finance",
+    "tags": ["escrow", "marketplace", "bond"]
+  }
+}

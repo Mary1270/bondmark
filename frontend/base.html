@@ -1,0 +1,563 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>BondMark on Base</title>
+<meta name="description" content="Seller bonds and on-chain dispute resolution for social commerce, on Base.">
+<meta name="theme-color" content="#0b0b12">
+<meta name="fc:miniapp" content='{"version": "1", "imageUrl": "APP_URL/embed.png", "button": {"title": "Open BondMark", "action": {"type": "launch_frame", "name": "BondMark", "url": "APP_URL/base.html"}}}'>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230b0b12'/%3E%3Cpath d='M16 5l9 4v7c0 5-4 9-9 11-5-2-9-6-9-11V9z' fill='none' stroke='%23b78cff' stroke-width='2.4'/%3E%3Cpath d='M12 16l3 3 5-6' fill='none' stroke='%2345e6c8' stroke-width='2.4'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b0b12;--bg2:#12121c;--card:#161624;--line:#26263a;--tx:#ecebf5;--mut:#9a98b3;--pri:#b78cff;--pk:#ff7ab8;--teal:#45e6c8;--ok:#45e6c8;--warn:#ffc65c;--bad:#ff6b81;--r:16px}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--tx);font-family:'Space Grotesk',system-ui,sans-serif;font-size:16px;line-height:1.45}
+body{min-height:100vh;padding-bottom:84px;background:radial-gradient(900px 400px at 85% -10%,#2a1b4d55,transparent),radial-gradient(700px 360px at -10% 10%,#0e3b3a44,transparent),var(--bg)}
+a{color:var(--pri);text-decoration:none}
+.mono{font-family:'JetBrains Mono',monospace;font-size:.86em}
+header{position:sticky;top:0;z-index:20;background:#0b0b12e6;backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.bar{max-width:760px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;gap:10px}
+.logo{display:flex;align-items:center;gap:8px;font-weight:700;font-size:1.15rem;letter-spacing:-.01em;color:var(--tx)}
+.logo svg{width:26px;height:26px}
+.grow{flex:1}
+main{max-width:760px;margin:0 auto;padding:16px}
+h1{font-size:1.65rem;line-height:1.15;margin:.2em 0 .3em;letter-spacing:-.02em}
+h2{font-size:1.15rem;margin:1.4em 0 .5em}
+.grad{background:linear-gradient(100deg,var(--pri),var(--pk) 55%,var(--teal));-webkit-background-clip:text;background-clip:text;color:transparent}
+.mut{color:var(--mut)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px;margin:10px 0}
+a.card{display:block;color:var(--tx)}
+a.card:active{border-color:var(--pri)}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.between{justify-content:space-between}
+.pill{display:inline-block;padding:2px 10px;border-radius:99px;font-size:.78rem;border:1px solid var(--line);color:var(--mut);white-space:nowrap}
+.pill.ok{color:var(--ok);border-color:#45e6c855}.pill.warn{color:var(--warn);border-color:#ffc65c55}.pill.bad{color:var(--bad);border-color:#ff6b8155}.pill.pri{color:var(--pri);border-color:#b78cff55}
+.btn{appearance:none;border:0;border-radius:12px;padding:12px 16px;font:inherit;font-weight:700;color:#0b0b12;background:linear-gradient(100deg,var(--pri),var(--pk));cursor:pointer;min-height:46px}
+.btn.sec{background:var(--bg2);color:var(--tx);border:1px solid var(--line)}
+.btn.sm{padding:8px 12px;min-height:36px;font-size:.9rem}
+.btn:disabled{opacity:.5}
+.btn.block{width:100%}
+label{display:block;font-size:.85rem;color:var(--mut);margin:12px 0 4px}
+input,textarea,select{width:100%;background:var(--bg2);color:var(--tx);border:1px solid var(--line);border-radius:12px;padding:12px;font:inherit;font-size:16px}
+textarea{min-height:90px;resize:vertical}
+input:focus,textarea:focus{outline:2px solid #b78cff66;border-color:var(--pri)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:10px}
+.stat b{display:block;font-size:1.15rem}
+.stat span{font-size:.78rem;color:var(--mut)}
+nav.tabs{position:fixed;bottom:0;left:0;right:0;z-index:30;background:#0b0b12f2;border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+nav.tabs div{max-width:760px;margin:0 auto;display:flex}
+nav.tabs a{flex:1;text-align:center;padding:10px 2px;color:var(--mut);font-size:.72rem}
+nav.tabs a svg{display:block;margin:0 auto 2px;width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8}
+nav.tabs a.on{color:var(--teal)}
+.toast{position:fixed;left:16px;right:16px;bottom:96px;z-index:50;max-width:728px;margin:0 auto;background:#1d1d30;border:1px solid var(--line);border-left:4px solid var(--pri);padding:12px 14px;border-radius:12px;box-shadow:0 8px 30px #0008}
+.toast.err{border-left-color:var(--bad)}.toast.good{border-left-color:var(--ok)}
+.meter{height:8px;border-radius:99px;background:var(--bg2);overflow:hidden;border:1px solid var(--line)}
+.meter i{display:block;height:100%;background:linear-gradient(90deg,var(--pri),var(--teal))}
+.steps{display:flex;gap:4px;margin:10px 0}
+.steps i{flex:1;height:6px;border-radius:99px;background:var(--line)}
+.steps i.d{background:var(--teal)}.steps i.c{background:var(--pri)}
+.ev{border-left:3px solid var(--line);padding:6px 10px;margin:8px 0;background:var(--bg2);border-radius:0 10px 10px 0;word-break:break-word}
+.ev.buyer{border-color:var(--pk)}.ev.seller{border-color:var(--teal)}
+.empty{text-align:center;color:var(--mut);padding:30px 10px}
+.warn-box{border:1px solid #ffc65c55;background:#ffc65c12;border-radius:12px;padding:10px 12px;font-size:.9rem}
+.sk{height:64px;border-radius:var(--r);background:linear-gradient(90deg,var(--card),#1d1d30,var(--card));background-size:200% 100%;animation:sk 1.2s infinite;margin:10px 0}
+@keyframes sk{to{background-position:-200% 0}}
+details{margin:8px 0}summary{cursor:pointer;color:var(--pri)}
+code{font-family:'JetBrains Mono',monospace;font-size:.85em;background:var(--bg2);padding:1px 6px;border-radius:6px;word-break:break-all}
+.word{word-break:break-word}
+</style>
+</head>
+<body>
+<header><div class="bar">
+<a class="logo" href="#/"><svg viewBox="0 0 32 32"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#b78cff"/><stop offset="1" stop-color="#45e6c8"/></linearGradient></defs><path d="M16 3l11 5v8c0 6-5 10-11 13C10 26 5 22 5 16V8z" fill="none" stroke="url(#g)" stroke-width="2.4"/><path d="M11 16l4 4 6-8" fill="none" stroke="url(#g)" stroke-width="2.6"/></svg>BondMark</a>
+<div class="grow"></div>
+<span class="pill pri" id="net"></span>
+<button class="btn sm sec" id="wbtn"></button>
+</div></header>
+<main id="app"></main>
+<nav class="tabs"><div id="tabs"></div></nav>
+<div id="toast"></div>
+
+<script type="module">
+import { createPublicClient, createWalletClient, custom, http, parseAbi, parseEther, formatEther } from "https://esm.sh/viem@2";
+import { base, baseSepolia } from "https://esm.sh/viem@2/chains";
+
+const DEFAULT_ADDRESS = "ADDRESS";
+const ABI = parseAbi([
+  "struct Deal { uint256 id; address seller; address buyer; string item; string priceText; string listingUrl; uint256 protect; uint256 lock; uint256 deliverySecs; uint8 status; uint64 createdAt; uint64 offerExpires; uint64 claimedAt; string paymentRef; uint64 boundAt; uint8 boundBy; uint64 deliveryDeadline; uint64 deliveredAt; string deliveryText; string deliveryUrl; uint32 rejections; string rejectReason; uint256 deposit; uint64 evidenceDeadline; bool reopened; uint8 evBuyer; uint8 evSeller; uint8 verdict; bytes32 reasonCode; string reason; uint256 compensation; uint256 fee; uint64 resolvedAt; bool paymentEvidenceReviewed; uint256 claimDeposit; uint256 pendingComp; uint64 unlockAt; bool challenged; }",
+  "struct Evidence { bool byBuyer; string text; string url; bytes32 digest; uint64 at; }",
+  "struct SellerInfo { address owner; string handle; uint256 bond; uint256 locked; uint256 available; uint256 maxProtect; uint256 score; uint256 lockBps; uint8 level; bool trusted; uint256 compensated; uint32 dealsBound; uint32 completedVerified; uint32 completedAuto; uint32 disputesLost; uint32 disputesSplit; uint32 disputesWon; uint32 inconclusive; uint32 rejectedClaims; uint32 lapsed; uint32 activeDeals; uint32 uniqueBuyers; }",
+  "function registerSeller(string handle) payable",
+  "function addBond() payable",
+  "function withdrawBond(uint256 amount)",
+  "function createDeal(string item, string priceText, string listingUrl, uint256 protect, uint256 deliveryHours) returns (uint256)",
+  "function cancelDeal(uint256 id)",
+  "function expireOffer(uint256 id)",
+  "function claimPayment(uint256 id, string paymentRef) payable",
+  "function challengePayout(uint256 id, string text, string url)",
+  "function finalizePayout(uint256 id)",
+  "function respondPayment(uint256 id, bool accept, string reason)",
+  "function bindByTimeout(uint256 id)",
+  "function submitDelivery(uint256 id, string text, string url)",
+  "function confirmDelivery(uint256 id)",
+  "function finalizeDeal(uint256 id)",
+  "function openDispute(uint256 id, string claimText, string url) payable",
+  "function submitEvidence(uint256 id, string text, string url)",
+  "function resolveTimeout(uint256 id)",
+  "function claim()",
+  "function getDeal(uint256 id) view returns (Deal)",
+  "function getEvidence(uint256 id) view returns (Evidence[])",
+  "function sellerInfo(address who) view returns (SellerInfo)",
+  "function isSeller(address who) view returns (bool)",
+  "function sellerByHandle(string handle) view returns (address)",
+  "function sellerCount() view returns (uint256)",
+  "function sellerAt(uint256 i) view returns (address)",
+  "function dealCount() view returns (uint256)",
+  "function claimable(address who) view returns (uint256)",
+  "function arbiter() view returns (address)",
+  "function unit() view returns (uint256)",
+  "function confirmWindow() view returns (uint256)",
+  "function reviewWindow() view returns (uint256)",
+  "function arbiterTimeout() view returns (uint256)",
+  "function MIN_BOND() view returns (uint256)",
+  "function VERIFIED_BOND() view returns (uint256)",
+  "function PREMIUM_BOND() view returns (uint256)",
+  "function MAX_PROTECT_STARTER() view returns (uint256)",
+  "function MAX_PROTECT_VERIFIED() view returns (uint256)",
+  "function MAX_PROTECT_PREMIUM() view returns (uint256)",
+  "function DISPUTE_DEPOSIT() view returns (uint256)",
+  "function CLAIM_DEPOSIT() view returns (uint256)",
+  "function LOCK_BPS_NEW() view returns (uint256)"
+]);
+
+const $ = (s, r = document) => r.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const store = {
+  get(k) { try { return localStorage.getItem(k); } catch { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); } catch {} }
+};
+const CHAINS = { sepolia: baseSepolia, mainnet: base };
+const qs = new URLSearchParams(location.search);
+{
+  const reqC = qs.get("c");
+  if (reqC && /^0x[0-9a-fA-F]{40}$/.test(reqC) && reqC.toLowerCase() !== String(store.get("bmb_contract") || "").toLowerCase()) {
+    let ok = false;
+    try { ok = window.confirm("This link wants BondMark to use a different contract:\n" + reqC + "\n\nOnly continue if you trust whoever sent it. Anything you send goes to that contract."); } catch {}
+    if (ok) store.set("bmb_contract", reqC);
+  }
+}
+if (qs.get("n") && CHAINS[qs.get("n")]) store.set("bmb_net", qs.get("n"));
+const S = { contract: store.get("bmb_contract") || DEFAULT_ADDRESS, net: store.get("bmb_net") || "sepolia", account: null, provider: null, busy: false, params: null, mini: null };
+const chain = () => CHAINS[S.net] || baseSepolia;
+const pub = () => (S.pc ||= createPublicClient({ chain: chain(), transport: http() }));
+const validAddr = a => /^0x[0-9a-fA-F]{40}$/.test(a || "");
+const ZERO = "0x0000000000000000000000000000000000000000";
+const N = x => Number(x);
+const eth = v => { const s = formatEther(BigInt(v || 0)); return s.includes(".") ? s.replace(/0+$/, "").replace(/\.$/, "") : s; };
+const safeHref = u => /^https:\/\/[^\s"'<>\\]+$/.test(String(u)) ? esc(u) : "#";
+const short = a => a ? a.slice(0, 6) + "…" + a.slice(-4) : "";
+const fmtTime = t => t ? new Date(N(t) * 1000).toLocaleString([], { dateStyle: "medium", timeStyle: "short" }) : "—";
+const now = () => Math.floor(Date.now() / 1000);
+const ago = t => {
+  t = N(t); if (!t) return "—";
+  const d = now() - t, a = Math.abs(d);
+  const u = a < 3600 ? [Math.max(1, Math.round(a / 60)), "min"] : a < 86400 ? [Math.round(a / 3600), "h"] : [Math.round(a / 86400), "d"];
+  return d >= 0 ? `${u[0]}${u[1]} ago` : `in ${u[0]}${u[1]}`;
+};
+const STATUS = [["Open", "pri"], ["Payment claimed", "warn"], ["Awaiting delivery", "pri"], ["Delivered", "pri"], ["Completed", "ok"], ["In dispute", "bad"], ["Dispute reopened", "bad"], ["Resolved", "warn"], ["Cancelled", ""], ["Expired", ""], ["Payout pending", "warn"], ["Payout challenged", "bad"]];
+const ST = { OPEN: 0, CLAIMED: 1, ACTIVE: 2, DELIVERED: 3, COMPLETED: 4, DISPUTED: 5, REOPENED: 6, RESOLVED: 7, CANCELLED: 8, EXPIRED: 9, PAYOUT_PENDING: 10, CHALLENGED: 11 };
+const VERDICT = ["", "Buyer wins", "Seller wins", "Split", "Insufficient evidence"];
+const LEVEL = ["STARTER", "VERIFIED", "PREMIUM"];
+const pill = s => { const [l, k] = STATUS[N(s)]; return `<span class="pill ${k}">${l}</span>`; };
+const levelPill = l => `<span class="pill ${N(l) === 2 ? "pri" : N(l) === 1 ? "ok" : ""}">${LEVEL[N(l)]}</span>`;
+const hexText = h => { try { return h.replace(/^0x/, "").replace(/(00)+$/, "").match(/.{2}/g)?.map(b => String.fromCharCode(parseInt(b, 16))).join("") || ""; } catch { return ""; } };
+
+function toast(msg, kind = "") {
+  const t = $("#toast");
+  t.innerHTML = `<div class="toast ${kind}">${esc(msg)}</div>`;
+  clearTimeout(toast.t);
+  toast.t = setTimeout(() => t.innerHTML = "", kind === "err" ? 7000 : 3500);
+}
+
+async function read(functionName, args = []) {
+  if (!validAddr(S.contract)) throw new Error("Contract address is not set. Open Settings.");
+  return pub().readContract({ address: S.contract, abi: ABI, functionName, args });
+}
+async function write(functionName, args = [], value = 0n, okMsg = "Done") {
+  if (!S.account) { toast("Connect a wallet first", "err"); return null; }
+  if (S.busy) return null;
+  S.busy = true;
+  try {
+    const wc = createWalletClient({ chain: chain(), transport: custom(S.provider), account: S.account });
+    try { await wc.switchChain({ id: chain().id }); } catch (e) { try { await wc.addChain({ chain: chain() }); } catch {} }
+    toast("Confirm in your wallet…");
+    const hash = await wc.writeContract({ address: S.contract, abi: ABI, functionName, args, value });
+    toast("Waiting for confirmation…");
+    await pub().waitForTransactionReceipt({ hash });
+    toast(okMsg, "good");
+    return hash;
+  } catch (e) {
+    toast((e?.shortMessage || e?.message || "Transaction failed").slice(0, 220), "err");
+    return null;
+  } finally { S.busy = false; }
+}
+
+async function connect() {
+  const p = S.provider || window.ethereum;
+  if (!p) { toast("No wallet found. Open this page inside Base App or a wallet browser.", "err"); return; }
+  try {
+    const [a] = await p.request({ method: "eth_requestAccounts" });
+    S.provider = p; S.account = a; store.set("bmb_auto", "1");
+    paintWallet(); route();
+  } catch (e) { toast(e?.message || "Wallet connection failed", "err"); }
+}
+function paintWallet() {
+  const b = $("#wbtn");
+  b.textContent = S.account ? short(S.account) : "Connect";
+  b.onclick = S.account ? () => (location.hash = "#/me") : connect;
+  $("#net").textContent = S.net === "mainnet" ? "Base" : "Base Sepolia";
+}
+
+const ICON = {
+  home: '<svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v9a1 1 0 01-1 1h-5v-6H9v6H4a1 1 0 01-1-1z"/></svg>',
+  shield: '<svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/></svg>',
+  plus: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>',
+  user: '<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg>',
+  info: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg>'
+};
+function paintTabs(h) {
+  const items = [["#/", "Deals", ICON.home], ["#/sellers", "Sellers", ICON.shield], ["#/new", "New deal", ICON.plus], ["#/me", "Me", ICON.user], ["#/how", "How", ICON.info]];
+  $("#tabs").innerHTML = items.map(([href, l, i]) => `<a href="${href}" class="${h === href || (href !== "#/" && h.startsWith(href)) ? "on" : ""}">${i}${l}</a>`).join("");
+}
+const view = html => { $("#app").innerHTML = html; window.scrollTo(0, 0); };
+const skeleton = () => view('<div class="sk"></div><div class="sk"></div><div class="sk"></div>');
+const errBox = e => view(`<div class="card"><b>Could not load</b><p class="mut word">${esc(e?.shortMessage || e?.message || e)}</p><a class="btn sm" href="#/settings">Settings</a></div>`);
+
+async function params() {
+  if (S.params) return S.params;
+  const names = ["unit", "confirmWindow", "reviewWindow", "arbiterTimeout", "MIN_BOND", "VERIFIED_BOND", "PREMIUM_BOND", "MAX_PROTECT_STARTER", "MAX_PROTECT_VERIFIED", "MAX_PROTECT_PREMIUM", "DISPUTE_DEPOSIT", "CLAIM_DEPOSIT", "LOCK_BPS_NEW", "arbiter"];
+  const vals = await Promise.all(names.map(n => read(n)));
+  S.params = Object.fromEntries(names.map((n, i) => [n, vals[i]]));
+  return S.params;
+}
+async function allDeals(max = 60) {
+  const c = N(await read("dealCount"));
+  const ids = []; for (let i = c - 1; i >= 0 && ids.length < max; i--) ids.push(i);
+  return Promise.all(ids.map(i => read("getDeal", [BigInt(i)])));
+}
+async function sellerKey(key) {
+  if (validAddr(key)) return key;
+  const a = await read("sellerByHandle", [String(key).toLowerCase()]);
+  return a === ZERO ? null : a;
+}
+
+function dealCard(d) {
+  return `<a class="card" href="#/deal/${d.id}">
+    <div class="row between"><b class="word">${esc(d.item)}</b>${pill(d.status)}</div>
+    <div class="row between mut" style="margin-top:6px"><span>${esc(d.priceText)}</span><span>Protected <b style="color:var(--teal)">${eth(d.protect)} ETH</b></span></div>
+    <div class="mut" style="font-size:.85rem;margin-top:4px">by <span class="mono">${esc(short(d.seller))}</span> · ${ago(d.createdAt)}</div></a>`;
+}
+function sellerCard(s) {
+  return `<a class="card" href="#/seller/${esc(s.handle)}">
+    <div class="row between"><b>@${esc(s.handle)}</b>${levelPill(s.level)}</div>
+    <div class="row" style="margin-top:8px"><div class="grow"><div class="meter"><i style="width:${N(s.score) / 10}%"></i></div></div><b>${N(s.score)}</b></div>
+    <div class="mut" style="font-size:.85rem;margin-top:6px">Can protect up to <b style="color:var(--teal)">${eth(s.available)} ETH</b> now · ${s.completedVerified + s.completedAuto} completed · ${s.disputesLost} lost</div></a>`;
+}
+
+async function pageHome() {
+  skeleton();
+  const deals = await allDeals(30);
+  const open = deals.filter(d => N(d.status) === ST.OPEN);
+  view(`<h1>Buy from <span class="grad">bonded</span> sellers.</h1>
+  <p class="mut">Pay the seller the way you always do. If they don't deliver, their ETH bond pays you back. Disputes are decided from the evidence both sides submit.</p>
+  <div class="row"><a class="btn sm" href="#/become">Become a seller</a><a class="btn sm sec" href="#/how">How it works</a></div>
+  <h2>Open offers <span class="mut">(${open.length})</span></h2>
+  ${open.length ? open.map(dealCard).join("") : '<div class="empty">No open offers yet.</div>'}
+  <h2>Recent activity</h2>
+  ${deals.filter(d => N(d.status) !== ST.OPEN).map(dealCard).join("") || '<div class="empty">Nothing yet.</div>'}`);
+}
+
+async function pageSellers() {
+  skeleton();
+  const c = N(await read("sellerCount"));
+  const addrs = await Promise.all(Array.from({ length: Math.min(c, 60) }, (_, i) => read("sellerAt", [BigInt(i)])));
+  const list = await Promise.all(addrs.map(a => read("sellerInfo", [a])));
+  list.sort((a, b) => N(b.score) - N(a.score));
+  view(`<h1>Sellers</h1><p class="mut">Ranked by reputation score. A bond is real ETH locked in the contract.</p>
+  ${list.length ? list.map(sellerCard).join("") : '<div class="empty">No sellers yet. Be the first.</div>'}`);
+}
+
+async function pageSeller(key) {
+  skeleton();
+  const addr = await sellerKey(key);
+  if (!addr) return view('<div class="empty">Seller not found.</div>');
+  const [s, deals] = await Promise.all([read("sellerInfo", [addr]), allDeals(100)]);
+  const mine = S.account && S.account.toLowerCase() === addr.toLowerCase();
+  const mineDeals = deals.filter(d => d.seller.toLowerCase() === addr.toLowerCase());
+  view(`<div class="row between"><h1>@${esc(s.handle)}</h1>${levelPill(s.level)}</div>
+  <div class="mut" style="font-size:.8rem">Self-declared handle. It is not a verified account — check the wallet address.</div>
+  <div class="mut mono word">${esc(addr)}</div>
+  <div class="card"><div class="row"><div class="grow"><div class="meter"><i style="width:${N(s.score) / 10}%"></i></div></div><b style="font-size:1.4rem">${N(s.score)}</b></div>
+  <div class="mut" style="font-size:.8rem">Reputation score (0–1000)${s.trusted ? " · trusted lock ratio" : ""}</div></div>
+  <div class="grid">
+    <div class="stat"><b>${eth(s.bond)} ETH</b><span>Total bond</span></div>
+    <div class="stat"><b>${eth(s.locked)} ETH</b><span>Locked in deals</span></div>
+    <div class="stat"><b style="color:var(--teal)">${eth(s.available)} ETH</b><span>Can protect now</span></div>
+    <div class="stat"><b>${s.activeDeals}</b><span>Active deals</span></div>
+    <div class="stat"><b>${s.completedVerified}</b><span>Buyer-confirmed</span></div>
+    <div class="stat"><b>${s.completedAuto}</b><span>Auto-completed</span></div>
+    <div class="stat"><b>${s.disputesWon} / ${s.disputesSplit} / ${s.disputesLost}</b><span>Disputes won / split / lost</span></div>
+    <div class="stat"><b>${s.rejectedClaims}</b><span>Payment claims rejected</span></div>
+  </div>
+  ${mine ? `<h2>Manage bond</h2><div class="card"><label>Add bond (ETH)</label><input id="addb" inputmode="decimal" placeholder="0.01"><button class="btn block" style="margin-top:10px" id="addbtn">Add bond</button>
+  <label>Withdraw (ETH, free bond only)</label><input id="wdb" inputmode="decimal" placeholder="0.005"><button class="btn sec block" style="margin-top:10px" id="wdbtn">Withdraw</button></div>` : ""}
+  <h2>Deals</h2>${mineDeals.length ? mineDeals.map(dealCard).join("") : '<div class="empty">No deals yet.</div>'}
+  <p class="mut" style="font-size:.8rem">The handle is a self-declared label. BondMark does not verify account ownership.</p>`);
+  if (mine) {
+    const amt = id => { try { const v = parseEther($(id).value.trim()); return v > 0n ? v : null; } catch { return null; } };
+    $("#addbtn").onclick = async () => { const v = amt("#addb"); if (!v) return toast("Enter an ETH amount", "err"); if (await write("addBond", [], v, "Bond added")) route(); };
+    $("#wdbtn").onclick = async () => { const v = amt("#wdb"); if (!v) return toast("Enter an ETH amount", "err"); if (await write("withdrawBond", [v], 0n, "Moved to your claimable balance")) route(); };
+  }
+}
+
+function stepper(d) {
+  const order = [ST.OPEN, ST.CLAIMED, ST.ACTIVE, ST.DELIVERED, ST.COMPLETED];
+  let idx = order.indexOf(N(d.status));
+  if ([ST.DISPUTED, ST.REOPENED, ST.PAYOUT_PENDING, ST.CHALLENGED, ST.RESOLVED].includes(N(d.status))) idx = 4;
+  if ([ST.CANCELLED, ST.EXPIRED].includes(N(d.status))) idx = -1;
+  return `<div class="steps">${order.map((_, i) => `<i class="${i < idx ? "d" : i === idx ? "c" : ""}"></i>`).join("")}</div>`;
+}
+function disputeForm(p) {
+  return `<details style="margin-top:12px"><summary>Something is wrong — open a dispute</summary>
+  <div class="warn-box" style="margin-top:8px">Needs a deposit of exactly ${eth(p.DISPUTE_DEPOSIT)} ETH. You get it back unless the verdict is Seller wins. If the seller never confirmed your payment, include proof of payment in your claim; compensation is then capped at 25%.</div>
+  <label>What happened?</label><textarea id="dcl" maxlength="1500"></textarea>
+  <label>Evidence link (https, optional)</label><input id="dur2" maxlength="300">
+  <button class="btn block" style="margin-top:10px" id="dispute">Open dispute</button></details>`;
+}
+
+async function pageDeal(idStr) {
+  skeleton();
+  const id = BigInt(idStr);
+  const [d, p] = await Promise.all([read("getDeal", [id]), params()]);
+  const st = N(d.status);
+  const ev = [ST.DISPUTED, ST.REOPENED, ST.PAYOUT_PENDING, ST.CHALLENGED, ST.RESOLVED].includes(st) ? await read("getEvidence", [id]) : [];
+  const me = (S.account || "").toLowerCase();
+  const isSeller = me && me === d.seller.toLowerCase(), isBuyer = me && d.buyer !== ZERO && me === d.buyer.toLowerCase();
+  const t = now(), review = N(p.reviewWindow), confirm = N(p.confirmWindow);
+  let info = "", actions = "";
+  if (st === ST.OPEN) {
+    info = `Offer open until ${fmtTime(d.offerExpires)}.`;
+    if (isSeller) actions = `<button class="btn sec block" id="cancel">Cancel offer</button>`;
+    else if (t > N(d.offerExpires)) actions = `<button class="btn sec block" id="expire">Release expired offer</button>`;
+    else actions = `<div class="warn-box">Pay the seller off-chain first (bank, card, whatever they use). Then paste your payment reference here.</div>
+      <label>Payment reference</label><input id="pref" maxlength="300" placeholder="Transfer ID, receipt number, last digits…">
+      <div class="warn-box" style="margin-top:8px">Claiming needs a deposit of exactly ${eth(p.CLAIM_DEPOSIT)} ETH. You get it back when the deal completes. If the seller rejects the claim, it is burned (paid to nobody).</div>
+      <button class="btn block" style="margin-top:10px" id="claimpay">I paid — claim payment (${eth(p.CLAIM_DEPOSIT)} ETH deposit)</button>`;
+  } else if (st === ST.CLAIMED) {
+    const dl = N(d.claimedAt) + confirm;
+    info = `Payment reference: <span class="mono word">${esc(d.paymentRef)}</span><br>Seller must answer by ${fmtTime(dl)}. If they stay silent the deal binds automatically.`;
+    if (isSeller) actions = `<button class="btn block" id="accept">Payment received — accept</button>
+      <label>Or reject (reason)</label><input id="rrs" maxlength="200" placeholder="Why this payment is not valid"><button class="btn sec block" style="margin-top:10px" id="reject">Reject claim</button>`;
+    else if (t >= dl) actions = `<button class="btn block" id="timeout">Bind deal (seller silent)</button>`;
+  } else if (st === ST.ACTIVE) {
+    const dd = N(d.deliveryDeadline);
+    info = `Bound by ${["", "seller", "timeout"][N(d.boundBy)]}. Delivery deadline ${fmtTime(dd)} (${ago(dd)}).${N(d.boundBy) === 2 ? '<br><span class="pill warn">Seller never confirmed payment</span> Compensation is capped at 25% of the protected amount and needs reviewed payment proof.' : ""}`;
+    if (isSeller) actions = `<label>Delivery proof (tracking number, details)</label><textarea id="dtx" maxlength="1500"></textarea>
+      <label>Proof link (https, optional)</label><input id="dur" maxlength="300" placeholder="https://…">
+      <button class="btn block" style="margin-top:10px" id="deliver">Submit delivery</button>`;
+    if (isBuyer && t > dd && t <= dd + review) actions += disputeForm(p);
+    if (t > dd + review) actions += `<button class="btn sec block" style="margin-top:10px" id="finalize">Close lapsed deal</button>`;
+  } else if (st === ST.DELIVERED) {
+    const rv = N(d.deliveredAt) + review;
+    info = `Seller says delivered ${ago(d.deliveredAt)}.<br><span class="word">${esc(d.deliveryText)}</span>${d.deliveryUrl ? `<br><a href="${safeHref(d.deliveryUrl)}" target="_blank" rel="noopener noreferrer">Proof link</a>` : ""}<br>Buyer can confirm or dispute until ${fmtTime(rv)}.`;
+    if (isBuyer && t <= rv) actions = `<button class="btn block" id="confirm">I received it — confirm</button>` + disputeForm(p);
+    else if (t > rv) actions = `<button class="btn sec block" id="finalize">Complete deal (review window ended)</button>`;
+  } else if (st === ST.PAYOUT_PENDING) {
+    const ul = N(d.unlockAt);
+    info = `<b>Ruling: ${VERDICT[N(d.verdict)]}</b> (payment was never confirmed by the seller)<br><span class="word">${esc(d.reason)}</span><br>Pending payout ${eth(d.pendingComp)} ETH. It unlocks ${fmtTime(ul)} (${ago(ul)}). The seller can challenge until then.`;
+    if (isSeller && t < ul) actions = `<label>Challenge: why was payment never received?</label><textarea id="ctx" maxlength="1500"></textarea>
+      <label>Proof link (https, optional)</label><input id="cur" maxlength="300"><button class="btn block" style="margin-top:10px" id="challenge">Challenge payout</button>`;
+    else if (t >= ul) actions = `<button class="btn block" id="finpay">Release payout</button>`;
+  } else if (st === ST.DISPUTED || st === ST.REOPENED || st === ST.CHALLENGED) {
+    const ed = N(d.evidenceDeadline);
+    info = `Evidence closes ${fmtTime(ed)} (${ago(ed)}). Then the arbiter <span class="mono">${esc(short(p.arbiter))}</span> rules.${st === ST.REOPENED ? "<br>The first review found too little evidence. Both sides get one more chance." : st === ST.CHALLENGED ? "<br>The seller challenged the pending payout. The arbiter will re-review; a buyer ruling is then paid immediately (still capped)." : ""}`;
+    if (t <= ed && (isBuyer || isSeller)) actions = `<label>Add evidence</label><textarea id="etx" maxlength="1500"></textarea>
+      <label>Evidence link (https, optional)</label><input id="eur" maxlength="300"><button class="btn block" style="margin-top:10px" id="addev">Submit evidence</button>`;
+    if (t > ed + N(p.arbiterTimeout)) actions = `<button class="btn sec block" id="atimeout">Arbiter silent — close as inconclusive</button>`;
+  } else if (st === ST.RESOLVED) {
+    info = `<b>${VERDICT[N(d.verdict)]}</b>${d.reason ? `<br><span class="word">${esc(d.reason)}</span>` : ""}<br>Reason code: <span class="mono">${esc(hexText(d.reasonCode))}</span><br>Compensation ${eth(d.compensation)} ETH · fee ${eth(d.fee)} ETH${N(d.boundBy) === 2 ? `<br>Payment unconfirmed by seller · cap 25% · payment evidence reviewed: ${d.paymentEvidenceReviewed ? "yes" : "no"}` : ""}`;
+  } else if (st === ST.COMPLETED) info = "Deal completed.";
+  else info = st === ST.CANCELLED ? "Offer cancelled." : "Expired.";
+
+  view(`<div class="row between"><a href="#/" class="mut">← Deals</a>${pill(d.status)}</div>
+  <h1 class="word">${esc(d.item)}</h1>${stepper(d)}
+  <div class="grid">
+    <div class="stat"><b>${esc(d.priceText)}</b><span>Price (display only)</span></div>
+    <div class="stat"><b style="color:var(--teal)">${eth(d.protect)} ETH</b><span>Protected amount</span></div>
+  </div>
+  <div class="warn-box" style="font-size:.85rem">Only the protected amount is covered, not the price. The price text is not enforced by the contract.</div>
+  <div class="card word">${info}</div>
+  <div class="card"><div class="row between"><span class="mut">Seller</span><a class="mono" href="#/seller/${esc(d.seller)}">${esc(short(d.seller))}</a></div>
+  ${d.buyer !== ZERO ? `<div class="row between"><span class="mut">Buyer</span><span class="mono">${esc(short(d.buyer))}</span></div>` : ""}
+  <div class="row between"><span class="mut">Bond locked</span><span>${eth(d.lock)} ETH</span></div>
+  <div class="row between"><span class="mut">Delivery window</span><span>${Math.round(N(d.deliverySecs) / N(p.unit))} h</span></div>
+  ${d.listingUrl ? `<div class="row between"><span class="mut">Listing</span><a href="${safeHref(d.listingUrl)}" target="_blank" rel="noopener noreferrer">open</a></div>` : ""}
+  ${N(d.rejections) ? `<div class="row between"><span class="mut">Earlier claims rejected</span><span>${d.rejections}</span></div>` : ""}</div>
+  ${actions ? `<div class="card">${actions}</div>` : ""}
+  ${ev.length ? `<h2>Evidence on record</h2>${ev.map(e => `<div class="ev ${e.byBuyer ? "buyer" : "seller"}"><b>${e.byBuyer ? "buyer" : "seller"}</b> <span class="mut">${ago(e.at)}</span><div>${esc(e.text)}</div>${e.url ? `<a href="${safeHref(e.url)}" target="_blank" rel="noopener noreferrer" class="word">${esc(e.url)}</a>` : ""}<div class="mono mut" style="font-size:.7rem">keccak ${esc(e.digest.slice(0, 18))}…</div></div>`).join("")}` : ""}`);
+
+  const on = (sel, fn) => { const el = $(sel); if (el) el.onclick = fn; };
+  const go = async (fn, args, val, msg) => { if (await write(fn, args, val, msg)) route(); };
+  on("#cancel", () => go("cancelDeal", [id], 0n, "Offer cancelled"));
+  on("#expire", () => go("expireOffer", [id], 0n, "Offer released"));
+  on("#claimpay", () => { const v = $("#pref").value.trim(); if (v.length < 5) return toast("Add a payment reference (5+ characters)", "err"); go("claimPayment", [id, v], BigInt(p.CLAIM_DEPOSIT), "Payment claimed"); });
+  on("#accept", () => go("respondPayment", [id, true, ""], 0n, "Deal is now binding"));
+  on("#reject", () => { const v = $("#rrs").value.trim(); if (v.length < 5) return toast("Give a short reason", "err"); go("respondPayment", [id, false, v], 0n, "Claim rejected"); });
+  on("#timeout", () => go("bindByTimeout", [id], 0n, "Deal is now binding"));
+  on("#deliver", () => { const v = $("#dtx").value.trim(); if (v.length < 3) return toast("Describe the delivery", "err"); go("submitDelivery", [id, v, $("#dur").value.trim()], 0n, "Delivery submitted"); });
+  on("#confirm", () => go("confirmDelivery", [id], 0n, "Thanks — deal completed"));
+  on("#finalize", () => go("finalizeDeal", [id], 0n, "Deal closed"));
+  on("#dispute", () => { const v = $("#dcl").value.trim(); if (v.length < 10) return toast("Describe the problem (10+ characters)", "err"); go("openDispute", [id, v, $("#dur2").value.trim()], BigInt(p.DISPUTE_DEPOSIT), "Dispute opened"); });
+  on("#addev", () => { const v = $("#etx").value.trim(); if (v.length < 5) return toast("Write the evidence (5+ characters)", "err"); go("submitEvidence", [id, v, $("#eur").value.trim()], 0n, "Evidence recorded"); });
+  on("#challenge", () => { const v = $("#ctx").value.trim(); if (v.length < 5) return toast("Explain the challenge (5+ characters)", "err"); go("challengePayout", [id, v, $("#cur").value.trim()], 0n, "Payout challenged"); });
+  on("#finpay", () => go("finalizePayout", [id], 0n, "Payout released"));
+  on("#atimeout", () => go("resolveTimeout", [id], 0n, "Closed as inconclusive"));
+}
+
+async function pageNew() {
+  if (!S.account) { view(`<h1>New deal</h1><div class="card"><p>Connect a wallet to create an offer.</p><button class="btn" id="c2">Connect</button></div>`); $("#c2").onclick = connect; return; }
+  const seller = await read("sellerInfo", [S.account]);
+  if (!(await read("isSeller", [S.account]))) return view(`<h1>New deal</h1><div class="card"><p>You need to be a registered seller first.</p><a class="btn" href="#/become">Become a seller</a></div>`);
+  view(`<h1>New deal</h1>
+  <div class="card"><div class="row between"><span class="mut">You can protect up to</span><b style="color:var(--teal)">${eth(seller.available)} ETH</b></div>
+  <div class="mut" style="font-size:.85rem">Bond locked per deal: ${N(seller.lockBps) / 100}% of the protected amount.</div></div>
+  <label>Item</label><input id="item" maxlength="200" placeholder="Red leather handbag, size M">
+  <label>Price (shown to the buyer, e.g. “40 USD”)</label><input id="price" maxlength="80">
+  <label>Listing link (https, optional)</label><input id="lurl" maxlength="300" placeholder="https://instagram.com/p/…">
+  <label>Protected amount (ETH)</label><input id="prot" inputmode="decimal" placeholder="0.002">
+  <label>Delivery time (hours)</label><input id="hrs" type="number" min="1" max="720" step="1" value="72" inputmode="numeric">
+  <button class="btn block" style="margin-top:16px" id="create">Create offer</button>`);
+  $("#create").onclick = async () => {
+    const item = $("#item").value.trim(), price = $("#price").value.trim(), hrs = parseInt($("#hrs").value, 10);
+    let prot; try { prot = parseEther($("#prot").value.trim()); } catch { prot = 0n; }
+    if (item.length < 3 || !price || prot <= 0n || !(hrs >= 1)) return toast("Fill every required field", "err");
+    if (await write("createDeal", [item, price, $("#lurl").value.trim(), prot, BigInt(hrs)], 0n, "Offer created")) location.hash = "#/seller/" + S.account;
+  };
+}
+
+async function pageBecome() {
+  const p = await params();
+  view(`<h1>Become a <span class="grad">bonded</span> seller</h1>
+  <p class="mut">Lock ETH as a bond. If you fail to deliver and lose a dispute, buyers are paid from it.</p>
+  <div class="card">
+  <div class="row between"><span>STARTER</span><span class="mut">${eth(p.MIN_BOND)}+ ETH · up to ${eth(p.MAX_PROTECT_STARTER)} per deal</span></div>
+  <div class="row between"><span>VERIFIED</span><span class="mut">${eth(p.VERIFIED_BOND)}+ ETH · up to ${eth(p.MAX_PROTECT_VERIFIED)}</span></div>
+  <div class="row between"><span>PREMIUM</span><span class="mut">${eth(p.PREMIUM_BOND)}+ ETH · up to ${eth(p.MAX_PROTECT_PREMIUM)}</span></div></div>
+  <label>Handle (lowercase letters, numbers, _ and .; 3–30)</label><input id="handle" maxlength="30" autocapitalize="none" placeholder="my_shop">
+  <label>Bond (ETH)</label><input id="bond" inputmode="decimal" value="${eth(p.MIN_BOND)}">
+  <div class="warn-box" style="margin-top:12px">Your handle is a label you choose. BondMark does not prove you own the Instagram account with that name.</div>
+  <button class="btn block" style="margin-top:14px" id="reg">Register and lock bond</button>`);
+  $("#reg").onclick = async () => {
+    const h = $("#handle").value.trim().toLowerCase();
+    let v; try { v = parseEther($("#bond").value.trim()); } catch { v = 0n; }
+    if (!/^[a-z0-9_.]{3,30}$/.test(h)) return toast("Invalid handle", "err");
+    if (v < BigInt(p.MIN_BOND)) return toast("Bond is below the minimum", "err");
+    if (await write("registerSeller", [h], v, "Registered")) location.hash = "#/seller/" + h;
+  };
+}
+
+async function pageMe() {
+  if (!S.account) { view(`<h1>Me</h1><div class="card"><p>Connect a wallet to see your deals and balance.</p><button class="btn" id="c3">Connect</button></div>`); $("#c3").onclick = connect; return; }
+  skeleton();
+  const a = S.account.toLowerCase();
+  const [cl, isS, deals] = await Promise.all([read("claimable", [S.account]), read("isSeller", [S.account]), allDeals(100)]);
+  const seller = isS ? await read("sellerInfo", [S.account]) : null;
+  const mine = deals.filter(d => d.seller.toLowerCase() === a || d.buyer.toLowerCase() === a);
+  view(`<h1>Me</h1><div class="mono mut word">${esc(S.account)}</div>
+  <div class="card"><div class="row between"><div><div class="mut">Claimable balance</div><b style="font-size:1.5rem">${eth(cl)} ETH</b></div>
+  <button class="btn" id="claim" ${BigInt(cl) === 0n ? "disabled" : ""}>Claim</button></div></div>
+  ${seller ? sellerCard(seller) : `<a class="btn sec block" href="#/become">Become a seller</a>`}
+  <h2>My deals</h2>${mine.length ? mine.map(dealCard).join("") : '<div class="empty">No deals yet.</div>'}
+  <p><a href="#/settings">Settings</a></p>`);
+  $("#claim").onclick = async () => { if (await write("claim", [], 0n, "Sent to your wallet")) route(); };
+}
+
+async function pageHow() {
+  view(`<h1>How BondMark works</h1>
+  <div class="card"><b>1. Seller posts a bond</b><p class="mut">ETH is locked in the contract. The bond sets how much value one seller can protect.</p></div>
+  <div class="card"><b>2. Seller lists a protected deal</b><p class="mut">150% of the protected amount stays locked (120% for proven sellers) until the deal ends.</p></div>
+  <div class="card"><b>3. Buyer pays off-chain, then claims</b><p class="mut">Pay by bank transfer, cash app or anything the seller accepts, then paste the payment reference. The seller can accept or reject. If they stay silent for 24 h, the deal binds anyway.</p></div>
+  <div class="card"><b>4. Delivery</b><p class="mut">The seller submits delivery proof. The buyer confirms, or after 72 h it completes on its own.</p></div>
+  <div class="card"><b>5. Dispute</b><p class="mut">The buyer puts down a small deposit. Both sides add up to 3 pieces of evidence. A designated arbiter then rules: buyer wins (full protected amount), split (half), seller wins, or not enough evidence (one more round, then no payout). If the arbiter stays silent for 7 days anyone can close the dispute with no payout and deposits are returned.</p></div>
+  <h2>What it cannot do</h2>
+  <div class="warn-box"><ul style="margin:0;padding-left:18px">
+  <li>It cannot see your bank. Payments and parcels are judged only from evidence people submit.</li>
+  <li>On Base the arbiter is a person or multisig chosen by the contract owner, not an AI. You are trusting that arbiter.</li>
+  <li>Handles are not verified accounts.</li>
+  <li>When the seller stays silent about a payment, any compensation is capped at 25%, needs reviewed payment proof, and is paid only after a 7-day window in which the seller can challenge.</li>
+  <li>Claiming a payment needs a refundable deposit; it is burned (paid to nobody) if the seller rejects the claim.</li>
+  <li>Compensation covers the protected amount, not necessarily the full price.</li>
+  <li>This is an unaudited prototype. Use Base Sepolia, not real money.</li></ul></div>`);
+}
+
+async function pageSettings() {
+  view(`<h1>Settings</h1>
+  <div class="card"><label>Network</label><select id="netsel"><option value="sepolia" ${S.net === "sepolia" ? "selected" : ""}>Base Sepolia (testnet)</option><option value="mainnet" ${S.net === "mainnet" ? "selected" : ""}>Base mainnet</option></select>
+  <label>Contract address</label><input id="caddr" class="mono" value="${esc(S.contract)}" placeholder="0x…">
+  <button class="btn block" style="margin-top:10px" id="save">Save</button>
+  <p class="mut" style="font-size:.85rem">You can also open this page with <code>?c=0x…&amp;n=sepolia</code>.</p></div>`);
+  $("#save").onclick = () => {
+    const v = $("#caddr").value.trim();
+    if (!validAddr(v)) return toast("Not a valid address", "err");
+    store.set("bmb_contract", v); store.set("bmb_net", $("#netsel").value);
+    S.contract = v; S.net = $("#netsel").value; S.pc = null; S.params = null;
+    paintWallet(); toast("Saved", "good"); location.hash = "#/";
+  };
+}
+
+async function route() {
+  const h = location.hash || "#/";
+  paintTabs(h);
+  const parts = h.slice(2).split("/");
+  try {
+    if (parts[0] !== "settings" && parts[0] !== "how" && !validAddr(S.contract)) return pageSettings();
+    switch (parts[0]) {
+      case "": return await pageHome();
+      case "sellers": return await pageSellers();
+      case "seller": return await pageSeller(decodeURIComponent(parts[1] || ""));
+      case "deal": return await pageDeal(decodeURIComponent(parts[1] || ""));
+      case "new": return await pageNew();
+      case "become": return await pageBecome();
+      case "me": return await pageMe();
+      case "how": return await pageHow();
+      case "settings": return await pageSettings();
+      default: return await pageHome();
+    }
+  } catch (e) { console.error(e); errBox(e); }
+}
+window.addEventListener("hashchange", route);
+paintWallet();
+route();
+
+(async () => {
+  try {
+    const mod = await import("https://esm.sh/@farcaster/miniapp-sdk@latest");
+    const sdk = mod.sdk || mod.default;
+    S.mini = sdk;
+    const inMini = await sdk.isInMiniApp?.();
+    if (inMini) {
+      S.provider = await sdk.wallet.getEthereumProvider();
+      await sdk.actions.ready();
+      if (S.provider) { const accs = await S.provider.request({ method: "eth_accounts" }).catch(() => []); if (accs[0]) { S.account = accs[0]; paintWallet(); route(); } }
+    }
+  } catch {}
+  if (!S.account && store.get("bmb_auto") && window.ethereum) {
+    window.ethereum.request({ method: "eth_accounts" }).then(acc => { if (acc && acc[0]) { S.provider = window.ethereum; S.account = acc[0]; paintWallet(); route(); } }).catch(() => {});
+  }
+})();
+</script>
+</body>
+</html>
