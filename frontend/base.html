@@ -5,81 +5,136 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>BondMark on Base</title>
 <meta name="description" content="Seller bonds and on-chain dispute resolution for social commerce, on Base.">
-<meta name="theme-color" content="#0b0b12">
+<meta name="theme-color" content="#0B7A6B">
 <meta name="fc:miniapp" content='{"version": "1", "imageUrl": "APP_URL/embed.png", "button": {"title": "Open BondMark", "action": {"type": "launch_frame", "name": "BondMark", "url": "APP_URL/base.html"}}}'>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230b0b12'/%3E%3Cpath d='M16 5l9 4v7c0 5-4 9-9 11-5-2-9-6-9-11V9z' fill='none' stroke='%23b78cff' stroke-width='2.4'/%3E%3Cpath d='M12 16l3 3 5-6' fill='none' stroke='%2345e6c8' stroke-width='2.4'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230B7A6B'/%3E%3Cpath d='M16 5l9 4v7c0 5-4 9-9 11-5-2-9-6-9-11V9z' fill='none' stroke='white' stroke-width='2.4'/%3E%3Cpath d='M12 16l3 3 5-6' fill='none' stroke='white' stroke-width='2.4'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0b0b12;--bg2:#12121c;--card:#161624;--line:#26263a;--tx:#ecebf5;--mut:#9a98b3;--pri:#b78cff;--pk:#ff7ab8;--teal:#45e6c8;--ok:#45e6c8;--warn:#ffc65c;--bad:#ff6b81;--r:16px}
+:root{--bg:#F5F7F8;--surface:#FFFFFF;--surface2:#EEF2F3;--line:#DDE3E6;--tx:#12181C;--mut:#56626B;--sig:#0B7A6B;--sig-ink:#FFFFFF;--sig-soft:#E1F3F0;--ok:#16794F;--warn:#9A6200;--bad:#B3261E;--shadow:0 1px 2px rgba(16,24,28,.06),0 4px 14px rgba(16,24,28,.06);--r:12px;--pri:var(--sig);--teal:var(--sig);--bg2:var(--surface2);--card:var(--surface)}
+:root[data-theme=dark]{--bg:#0E1417;--surface:#151D21;--surface2:#1B262B;--line:#26343A;--tx:#E8EEF0;--mut:#9AA9B0;--sig:#3DD6BD;--sig-ink:#06201B;--sig-soft:#123A35;--ok:#4FD39A;--warn:#F0B54A;--bad:#FF8A80;--shadow:0 1px 2px rgba(0,0,0,.4),0 4px 14px rgba(0,0,0,.3)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;background:var(--bg);color:var(--tx);font-family:'Space Grotesk',system-ui,sans-serif;font-size:16px;line-height:1.45}
-body{min-height:100vh;padding-bottom:84px;background:radial-gradient(900px 400px at 85% -10%,#2a1b4d55,transparent),radial-gradient(700px 360px at -10% 10%,#0e3b3a44,transparent),var(--bg)}
-a{color:var(--pri);text-decoration:none}
-.mono{font-family:'JetBrains Mono',monospace;font-size:.86em}
-header{position:sticky;top:0;z-index:20;background:#0b0b12e6;backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
-.bar{max-width:760px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;gap:10px}
-.logo{display:flex;align-items:center;gap:8px;font-weight:700;font-size:1.15rem;letter-spacing:-.01em;color:var(--tx)}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+html,body{margin:0;background:var(--bg);color:var(--tx);font-family:'Public Sans',system-ui,-apple-system,Segoe UI,sans-serif;font-size:16px;line-height:1.5}
+body{min-height:100vh;padding-bottom:76px}
+a{color:var(--sig);text-decoration:none}
+a:hover{text-decoration:underline}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.86em}
+header.top{position:sticky;top:0;z-index:20;background:var(--surface);border-bottom:1px solid var(--line)}
+.bar{max-width:1120px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:8px}
+.logo{display:flex;align-items:center;gap:8px;font-weight:700;font-size:1.1rem;color:var(--tx)}
+.logo:hover{text-decoration:none}
 .logo svg{width:26px;height:26px}
-.grow{flex:1}
-main{max-width:760px;margin:0 auto;padding:16px}
-h1{font-size:1.65rem;line-height:1.15;margin:.2em 0 .3em;letter-spacing:-.02em}
-h2{font-size:1.15rem;margin:1.4em 0 .5em}
-.grad{background:linear-gradient(100deg,var(--pri),var(--pk) 55%,var(--teal));-webkit-background-clip:text;background-clip:text;color:transparent}
+.grow{flex:1;min-width:0}
+.shell{max-width:1120px;margin:0 auto;display:block}
+aside.side{display:none}
+main{padding:16px;min-width:0}
+h1{font-size:1.7rem;line-height:1.2;margin:.2em 0 .3em;letter-spacing:-.015em;font-weight:700}
+h2{font-size:1.1rem;margin:1.6em 0 .5em;font-weight:700}
+h3{font-size:1rem;margin:0 0 4px}
 .mut{color:var(--mut)}
-.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px;margin:10px 0}
-a.card{display:block;color:var(--tx)}
-a.card:active{border-color:var(--pri)}
+.sig{color:var(--sig)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px;margin:10px 0;box-shadow:var(--shadow)}
+a.card{display:block;color:var(--tx);border-top:3px solid var(--line)}
+a.card:hover{text-decoration:none;border-color:var(--sig)}
 .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 .between{justify-content:space-between}
-.pill{display:inline-block;padding:2px 10px;border-radius:99px;font-size:.78rem;border:1px solid var(--line);color:var(--mut);white-space:nowrap}
-.pill.ok{color:var(--ok);border-color:#45e6c855}.pill.warn{color:var(--warn);border-color:#ffc65c55}.pill.bad{color:var(--bad);border-color:#ff6b8155}.pill.pri{color:var(--pri);border-color:#b78cff55}
-.btn{appearance:none;border:0;border-radius:12px;padding:12px 16px;font:inherit;font-weight:700;color:#0b0b12;background:linear-gradient(100deg,var(--pri),var(--pk));cursor:pointer;min-height:46px}
-.btn.sec{background:var(--bg2);color:var(--tx);border:1px solid var(--line)}
-.btn.sm{padding:8px 12px;min-height:36px;font-size:.9rem}
-.btn:disabled{opacity:.5}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:2px 10px;border-radius:99px;font-size:.78rem;border:1px solid var(--line);color:var(--mut);white-space:nowrap;background:var(--surface)}
+.pill:before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor;opacity:.8}
+.pill.ok{color:var(--ok);border-color:currentColor}.pill.warn{color:var(--warn);border-color:currentColor}.pill.bad{color:var(--bad);border-color:currentColor}.pill.pri{color:var(--sig);border-color:currentColor}
+.btn{appearance:none;border:1px solid var(--sig);border-radius:10px;padding:11px 16px;font:inherit;font-weight:600;color:var(--sig-ink);background:var(--sig);cursor:pointer;min-height:44px;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn:hover{text-decoration:none;filter:brightness(1.05)}
+.btn.sec{background:var(--surface);color:var(--tx);border-color:var(--line)}
+.btn.sm{padding:7px 12px;min-height:38px;font-size:.92rem}
+.btn:disabled,body.busy .btn{opacity:.55;pointer-events:none}
 .btn.block{width:100%}
+.iconbtn{appearance:none;background:var(--surface);border:1px solid var(--line);border-radius:10px;width:38px;height:38px;color:var(--tx);cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
+.iconbtn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8}
 label{display:block;font-size:.85rem;color:var(--mut);margin:12px 0 4px}
-input,textarea,select{width:100%;background:var(--bg2);color:var(--tx);border:1px solid var(--line);border-radius:12px;padding:12px;font:inherit;font-size:16px}
+input,textarea,select{width:100%;background:var(--surface);color:var(--tx);border:1px solid var(--line);border-radius:10px;padding:11px 12px;font:inherit;font-size:16px}
 textarea{min-height:90px;resize:vertical}
-input:focus,textarea:focus{outline:2px solid #b78cff66;border-color:var(--pri)}
+input:focus,textarea:focus,select:focus,.btn:focus-visible,.iconbtn:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var(--sig);outline-offset:2px}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.stat{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:10px}
-.stat b{display:block;font-size:1.15rem}
-.stat span{font-size:.78rem;color:var(--mut)}
-nav.tabs{position:fixed;bottom:0;left:0;right:0;z-index:30;background:#0b0b12f2;border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px}
+.stat b{display:block;font-size:1.2rem}
+.stat span{font-size:.8rem;color:var(--mut)}
+.stat small{display:block;font-size:.75rem;margin-top:2px;color:var(--sig)}
+nav.tabs{position:fixed;bottom:0;left:0;right:0;z-index:30;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
 nav.tabs div{max-width:760px;margin:0 auto;display:flex}
-nav.tabs a{flex:1;text-align:center;padding:10px 2px;color:var(--mut);font-size:.72rem}
-nav.tabs a svg{display:block;margin:0 auto 2px;width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8}
-nav.tabs a.on{color:var(--teal)}
-.toast{position:fixed;left:16px;right:16px;bottom:96px;z-index:50;max-width:728px;margin:0 auto;background:#1d1d30;border:1px solid var(--line);border-left:4px solid var(--pri);padding:12px 14px;border-radius:12px;box-shadow:0 8px 30px #0008}
+nav.tabs a{flex:1;text-align:center;padding:8px 2px;color:var(--mut);font-size:.72rem;min-height:48px}
+nav.tabs a:hover{text-decoration:none}
+nav.tabs a svg,aside.side a svg{display:block;margin:0 auto 2px;width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8}
+nav.tabs a.on{color:var(--sig);font-weight:600}
+aside.side a{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;color:var(--tx);border:1px solid transparent;margin-bottom:4px}
+aside.side a svg{margin:0;width:20px;height:20px}
+aside.side a:hover{text-decoration:none;background:var(--surface2)}
+aside.side a.on{border-color:var(--sig);color:var(--sig);font-weight:600}
+.toast{position:fixed;left:16px;right:16px;bottom:92px;z-index:60;max-width:560px;margin:0 auto;background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--sig);padding:12px 14px;border-radius:10px;box-shadow:var(--shadow)}
 .toast.err{border-left-color:var(--bad)}.toast.good{border-left-color:var(--ok)}
-.meter{height:8px;border-radius:99px;background:var(--bg2);overflow:hidden;border:1px solid var(--line)}
-.meter i{display:block;height:100%;background:linear-gradient(90deg,var(--pri),var(--teal))}
+.meter{height:8px;border-radius:99px;background:var(--surface2);overflow:hidden;border:1px solid var(--line)}
+.meter i{display:block;height:100%;background:var(--sig)}
 .steps{display:flex;gap:4px;margin:10px 0}
 .steps i{flex:1;height:6px;border-radius:99px;background:var(--line)}
-.steps i.d{background:var(--teal)}.steps i.c{background:var(--pri)}
-.ev{border-left:3px solid var(--line);padding:6px 10px;margin:8px 0;background:var(--bg2);border-radius:0 10px 10px 0;word-break:break-word}
-.ev.buyer{border-color:var(--pk)}.ev.seller{border-color:var(--teal)}
-.empty{text-align:center;color:var(--mut);padding:30px 10px}
-.warn-box{border:1px solid #ffc65c55;background:#ffc65c12;border-radius:12px;padding:10px 12px;font-size:.9rem}
-.sk{height:64px;border-radius:var(--r);background:linear-gradient(90deg,var(--card),#1d1d30,var(--card));background-size:200% 100%;animation:sk 1.2s infinite;margin:10px 0}
+.steps i.d{background:var(--sig)}.steps i.c{background:var(--sig);opacity:.55}
+.ev{border-left:3px solid var(--line);padding:6px 10px;margin:8px 0;background:var(--surface2);border-radius:0 10px 10px 0;word-break:break-word}
+.ev.buyer{border-color:var(--warn)}.ev.seller{border-color:var(--sig)}
+.empty{text-align:center;color:var(--mut);padding:26px 10px}
+.warn-box{border:1px solid var(--warn);background:var(--surface2);border-radius:10px;padding:10px 12px;font-size:.9rem}
+.sk{height:64px;border-radius:var(--r);background:linear-gradient(90deg,var(--surface2),var(--surface),var(--surface2));background-size:200% 100%;animation:sk 1.2s infinite;margin:10px 0}
 @keyframes sk{to{background-position:-200% 0}}
-details{margin:8px 0}summary{cursor:pointer;color:var(--pri)}
-code{font-family:'JetBrains Mono',monospace;font-size:.85em;background:var(--bg2);padding:1px 6px;border-radius:6px;word-break:break-all}
+details{margin:8px 0}summary{cursor:pointer;color:var(--sig);min-height:36px;display:flex;align-items:center}
+code{font-family:ui-monospace,Menlo,monospace;font-size:.85em;background:var(--surface2);padding:1px 6px;border-radius:6px;word-break:break-all}
 .word{word-break:break-word}
+.hero{display:grid;gap:16px;align-items:center;padding:8px 0}
+.hero p.lede{color:var(--mut);margin:.3em 0 1em;max-width:52ch}
+.hero svg.art{width:100%;max-width:320px;height:auto;justify-self:center;animation:rise .7s ease both}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.hero svg.art,.sk{animation:none}}
+.live{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--surface);border-radius:99px;padding:3px 12px;font-size:.8rem;color:var(--mut)}
+.live i{width:8px;height:8px;border-radius:50%;background:var(--mut)}
+.live.on i{background:var(--ok)}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+.roles{display:grid;gap:10px}
+.role{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px;color:var(--tx);box-shadow:var(--shadow)}
+.role:hover{border-color:var(--sig);text-decoration:none}
+.tile{width:48px;height:48px;border-radius:12px;background:var(--sig-soft);display:flex;align-items:center;justify-content:center;flex:none}
+.tile svg{width:26px;height:26px;stroke:var(--sig);fill:none;stroke-width:1.8}
+.role .arrow{margin-left:auto;color:var(--sig);font-size:1.3rem}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.chip{border:1px solid var(--line);background:var(--surface);color:var(--tx);border-radius:99px;padding:8px 14px;font-size:.95rem;min-height:38px;display:inline-flex;align-items:center}
+.chip:hover{border-color:var(--sig);color:var(--sig);text-decoration:none}
+.feed .item{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);align-items:flex-start}
+.feed .item:last-child{border-bottom:0}
+.feed .dot{width:9px;height:9px;border-radius:50%;background:var(--sig);margin-top:7px;flex:none}
+.how4{display:grid;gap:10px}
+.how4 .card{margin:0}
+.how4 .n{display:inline-flex;width:26px;height:26px;border-radius:50%;background:var(--sig-soft);color:var(--sig);font-weight:700;align-items:center;justify-content:center;margin-bottom:6px}
+dialog{border:1px solid var(--line);border-radius:14px;background:var(--surface);color:var(--tx);padding:18px;max-width:min(92vw,440px);box-shadow:var(--shadow)}
+dialog::backdrop{background:rgba(0,0,0,.45)}
+.track{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:12px 0}
+.track div{font-size:.72rem;text-align:center;color:var(--mut);border-top:4px solid var(--line);padding-top:6px}
+.track div.d{border-color:var(--sig);color:var(--tx)}
+.track div.c{border-color:var(--sig);opacity:.6}
+.track div.x{border-color:var(--bad);color:var(--bad)}
+.txbox{position:fixed;left:16px;right:16px;bottom:92px;z-index:55;max-width:560px;margin:0 auto}
+@media (min-width:640px){.stats{grid-template-columns:repeat(4,1fr)}.roles{grid-template-columns:repeat(3,1fr)}.how4{grid-template-columns:repeat(4,1fr)}.hero{grid-template-columns:1.2fr .8fr}}
+@media (min-width:1024px){body{padding-bottom:0}nav.tabs{display:none}.shell{display:grid;grid-template-columns:220px minmax(0,1fr);gap:8px}aside.side{display:block;padding:16px 8px 16px 16px;position:sticky;top:60px;align-self:start}main{padding:20px 16px 40px}.toast,.txbox{bottom:24px}}
+@media (max-width:480px){#net{display:none}}
 </style>
+<script>try{var m=localStorage.getItem("bm_theme");if(m)document.documentElement.setAttribute("data-theme",m);else if(matchMedia("(prefers-color-scheme: dark)").matches)document.documentElement.setAttribute("data-theme","dark")}catch(e){}</script>
 </head>
 <body>
-<header><div class="bar">
-<a class="logo" href="#/"><svg viewBox="0 0 32 32"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#b78cff"/><stop offset="1" stop-color="#45e6c8"/></linearGradient></defs><path d="M16 3l11 5v8c0 6-5 10-11 13C10 26 5 22 5 16V8z" fill="none" stroke="url(#g)" stroke-width="2.4"/><path d="M11 16l4 4 6-8" fill="none" stroke="url(#g)" stroke-width="2.6"/></svg>BondMark</a>
+<header class="top"><div class="bar">
+<a class="logo" href="#/"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3l11 5v8c0 6-5 10-11 13C10 26 5 22 5 16V8z" fill="none" stroke="var(--sig)" stroke-width="2.4"/><path d="M11 16l4 4 6-8" fill="none" stroke="var(--sig)" stroke-width="2.6"/></svg>BondMark</a>
 <div class="grow"></div>
 <span class="pill pri" id="net"></span>
-<button class="btn sm sec" id="wbtn"></button>
+<button class="iconbtn" id="themebtn" aria-label="Toggle light and dark theme"><svg viewBox="0 0 24 24"><path d="M21 13A9 9 0 1111 3a7 7 0 0010 10z"/></svg></button>
+<button class="btn sm sec" id="wbtn">Connect</button>
 </div></header>
-<main id="app"></main>
+<div class="shell"><aside class="side" id="side"></aside><main id="app"></main></div>
 <nav class="tabs"><div id="tabs"></div></nav>
-<div id="toast"></div>
+<div id="toast"></div><div id="tx"></div>
+<dialog id="dlg"></dialog>
 
 <script type="module">
 import { createPublicClient, createWalletClient, custom, http, parseAbi, parseEther, formatEther } from "https://esm.sh/viem@2";
@@ -116,6 +171,10 @@ const ABI = parseAbi([
   "function sellerCount() view returns (uint256)",
   "function sellerAt(uint256 i) view returns (address)",
   "function dealCount() view returns (uint256)",
+  "function totalBonds() view returns (uint256)",
+  "function totalClaimable() view returns (uint256)",
+  "function depositsHeld() view returns (uint256)",
+  "function burned() view returns (uint256)",
   "function claimable(address who) view returns (uint256)",
   "function arbiter() view returns (address)",
   "function unit() view returns (uint256)",
@@ -186,23 +245,82 @@ async function read(functionName, args = []) {
   if (!validAddr(S.contract)) throw new Error("Contract address is not set. Open Settings.");
   return pub().readContract({ address: S.contract, abi: ABI, functionName, args });
 }
+const CONFIRM_FNS = {
+  withdrawBond: "Move this part of your bond to your claimable balance?",
+  claim: "Send your claimable balance to your wallet?",
+  respondPayment: "Answer this payment claim? Rejecting burns the buyer's claim deposit.",
+  challengePayout: "Challenge the pending payout? The ruling is re-reviewed once.",
+  finalizePayout: "Release the pending payout to the buyer?",
+  resolveTimeout: "Close this dispute as inconclusive and return deposits?",
+  confirmDelivery: "Confirm you received the item? This completes the deal and cannot be undone.",
+  registerSeller: "Register and lock this bond in the contract?",
+  addBond: "Lock this extra bond in the contract?",
+  claimPayment: "Claim the payment and put down the claim deposit?",
+  openDispute: "Open a dispute and put down the dispute deposit?"
+};
+function confirmBox(title, body) {
+  const d = $("#dlg");
+  d.innerHTML = `<h3>${esc(title)}</h3><p class="mut">${esc(body)}</p><div class="row" style="justify-content:flex-end;margin-top:12px"><button class="btn sec sm" value="no">Cancel</button><button class="btn sm" value="yes">Confirm</button></div>`;
+  return new Promise(res => {
+    d.onclose = () => res(d.returnValue === "yes");
+    d.onclick = e => { if (e.target === d) d.close("no"); };
+    for (const b of d.querySelectorAll("button")) b.onclick = () => d.close(b.value);
+    try { d.returnValue = ""; d.showModal(); } catch { res(window.confirm(title + "\n\n" + body)); }
+  });
+}
+function paintTrack(stage, fail) {
+  const names = ["Signature", "Submitted", "Accepted", "Finalized"];
+  $("#tx").innerHTML = stage < 0 ? "" : `<div class="card txbox"><div class="track">${names.map((n, i) => `<div class="${fail === i ? "x" : i < stage ? "d" : i === stage ? "c" : ""}">${n}</div>`).join("")}</div></div>`;
+}
+function explain(e) {
+  const m = String(e?.shortMessage || e?.message || e || "");
+  if (e?.code === 4001 || /user (rejected|denied)|rejected the request/i.test(m)) return "You declined the request in your wallet. Nothing was sent.";
+  if (/insufficient funds|exceeds the balance/i.test(m)) return "Not enough ETH in this wallet for the amount plus gas.";
+  if (/chain/i.test(m) && /mismatch|switch|wrong|unrecognized|not added/i.test(m)) return "Your wallet is on the wrong network. Switch to " + (S.net === "mainnet" ? "Base" : "Base Sepolia") + " and try again.";
+  const r = m.match(/reverted with the following reason:\s*(.+?)(?:\n|$)/i) || m.match(/reason:\s*(.+?)(?:\n|$)/i);
+  if (r) return "The contract refused this action: " + r[1].trim().slice(0, 200);
+  return m.slice(0, 220) || "Transaction failed";
+}
 async function write(functionName, args = [], value = 0n, okMsg = "Done") {
   if (!S.account) { toast("Connect a wallet first", "err"); return null; }
   if (S.busy) return null;
-  S.busy = true;
+  if (CONFIRM_FNS[functionName] || value > 0n) {
+    const body = (CONFIRM_FNS[functionName] || "This sends ETH to the contract.") + (value > 0n ? ` Amount: ${eth(value)} ETH.` : "");
+    if (!(await confirmBox("Please confirm", body))) return null;
+  }
+  S.busy = true; document.body.classList.add("busy");
+  let stage = 0;
   try {
     const wc = createWalletClient({ chain: chain(), transport: custom(S.provider), account: S.account });
-    try { await wc.switchChain({ id: chain().id }); } catch (e) { try { await wc.addChain({ chain: chain() }); } catch {} }
-    toast("Confirm in your wallet…");
+    try {
+      const have = parseInt(await S.provider.request({ method: "eth_chainId" }), 16);
+      if (have !== chain().id) {
+        if (!(await confirmBox("Wrong network", "Your wallet is on another network. Switch to " + (S.net === "mainnet" ? "Base" : "Base Sepolia") + "?"))) return null;
+        try { await wc.switchChain({ id: chain().id }); } catch (e) { await wc.addChain({ chain: chain() }); }
+      }
+    } catch (e) { toast(explain(e), "err"); return null; }
+    if (value > 0n) {
+      try {
+        const bal = await pub().getBalance({ address: S.account });
+        if (bal < value) { toast("Not enough ETH in this wallet. You need " + eth(value) + " ETH plus gas.", "err"); return null; }
+      } catch {}
+    }
+    paintTrack(0);
     const hash = await wc.writeContract({ address: S.contract, abi: ABI, functionName, args, value });
-    toast("Waiting for confirmation…");
-    await pub().waitForTransactionReceipt({ hash });
+    stage = 1; paintTrack(1);
+    const rc = await pub().waitForTransactionReceipt({ hash });
+    stage = 2; paintTrack(2);
+    if (rc.status === "reverted") throw new Error("The transaction was mined but reverted.");
+    stage = 3; paintTrack(3);
     toast(okMsg, "good");
+    setTimeout(() => paintTrack(-1), 1500);
     return hash;
   } catch (e) {
-    toast((e?.shortMessage || e?.message || "Transaction failed").slice(0, 220), "err");
+    paintTrack(stage, stage);
+    toast(explain(e), "err");
+    setTimeout(() => paintTrack(-1), 4000);
     return null;
-  } finally { S.busy = false; }
+  } finally { S.busy = false; document.body.classList.remove("busy"); }
 }
 
 async function connect() {
@@ -212,7 +330,7 @@ async function connect() {
     const [a] = await p.request({ method: "eth_requestAccounts" });
     S.provider = p; S.account = a; store.set("bmb_auto", "1");
     paintWallet(); route();
-  } catch (e) { toast(e?.message || "Wallet connection failed", "err"); }
+  } catch (e) { toast(explain(e), "err"); }
 }
 function paintWallet() {
   const b = $("#wbtn");
@@ -220,6 +338,12 @@ function paintWallet() {
   b.onclick = S.account ? () => (location.hash = "#/me") : connect;
   $("#net").textContent = S.net === "mainnet" ? "Base" : "Base Sepolia";
 }
+$("#themebtn").onclick = () => {
+  const cur = document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
+  const nx = cur === "dark" ? "light" : "dark";
+  document.documentElement.setAttribute("data-theme", nx);
+  try { localStorage.setItem("bm_theme", nx); } catch {}
+};
 
 const ICON = {
   home: '<svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v9a1 1 0 01-1 1h-5v-6H9v6H4a1 1 0 01-1-1z"/></svg>',
@@ -229,9 +353,12 @@ const ICON = {
   info: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg>'
 };
 function paintTabs(h) {
-  const items = [["#/", "Deals", ICON.home], ["#/sellers", "Sellers", ICON.shield], ["#/new", "New deal", ICON.plus], ["#/me", "Me", ICON.user], ["#/how", "How", ICON.info]];
-  $("#tabs").innerHTML = items.map(([href, l, i]) => `<a href="${href}" class="${h === href || (href !== "#/" && h.startsWith(href)) ? "on" : ""}">${i}${l}</a>`).join("");
+  const items = [["#/", "Deals", ICON.home], ["#/sellers", "Sellers", ICON.shield], ["#/new", "New deal", ICON.plus], ["#/me", "Me", ICON.user], ["#/how", "How it works", ICON.info]];
+  const html = items.map(([href, l, i]) => `<a href="${href}" class="${h === href || (href !== "#/" && h.startsWith(href)) ? "on" : ""}">${i}${l}</a>`).join("");
+  $("#tabs").innerHTML = html;
+  $("#side").innerHTML = html;
 }
+
 const view = html => { $("#app").innerHTML = html; window.scrollTo(0, 0); };
 const skeleton = () => view('<div class="sk"></div><div class="sk"></div><div class="sk"></div>');
 const errBox = e => view(`<div class="card"><b>Could not load</b><p class="mut word">${esc(e?.shortMessage || e?.message || e)}</p><a class="btn sm" href="#/settings">Settings</a></div>`);
@@ -267,17 +394,62 @@ function sellerCard(s) {
     <div class="mut" style="font-size:.85rem;margin-top:6px">Can protect up to <b style="color:var(--teal)">${eth(s.available)} ETH</b> now · ${s.completedVerified + s.completedAuto} completed · ${s.disputesLost} lost</div></a>`;
 }
 
+const ART = '<svg class="art" viewBox="0 0 320 220" aria-hidden="true"><rect x="20" y="40" width="280" height="150" rx="14" fill="var(--surface)" stroke="var(--line)"/><rect x="40" y="62" width="110" height="12" rx="6" fill="var(--sig-soft)"/><rect x="40" y="86" width="190" height="8" rx="4" fill="var(--line)"/><rect x="40" y="104" width="150" height="8" rx="4" fill="var(--line)"/><path d="M235 118l32 14v22c0 15-12 26-32 32-20-6-32-17-32-32v-22z" fill="var(--sig-soft)" stroke="var(--sig)" stroke-width="3"/><path d="M222 150l9 9 17-20" fill="none" stroke="var(--sig)" stroke-width="4" stroke-linecap="round"/><circle cx="62" cy="158" r="16" fill="var(--sig-soft)" stroke="var(--sig)" stroke-width="2"/><text x="62" y="164" text-anchor="middle" font-size="16" font-weight="700" fill="var(--sig)">G</text></svg>';
+const RICON = {
+  buy: '<svg viewBox="0 0 24 24"><path d="M5 7h14l-1.500 11H6.500z"/><path d="M9 7a3 3 0 016 0"/></svg>',
+  sell: '<svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.500 8-8 9-4.500-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg>',
+  court: '<svg viewBox="0 0 24 24"><path d="M12 4v16M6 8h12M6 8l-3 7h6zM18 8l-3 7h6z"/></svg>'
+};
+function feedItems(deals) {
+  const ev = [];
+  for (const d of deals) {
+    const id = String(d.id);
+    if (N(d.createdAt)) ev.push([N(d.createdAt), `Offer created: <b class="word">${esc(d.item)}</b>`, id]);
+    if (N(d.status) === ST.RESOLVED && N(d.resolvedAt)) ev.push([N(d.resolvedAt), `${esc(VERDICT[N(d.verdict)].toLowerCase())}: <b class="word">${esc(d.item)}</b>`, id]);
+    if (N(d.status) === ST.COMPLETED && N(d.resolvedAt)) ev.push([N(d.resolvedAt), `Completed: <b class="word">${esc(d.item)}</b>`, id]);
+  }
+  ev.sort((a, b) => b[0] - a[0]);
+  return ev.slice(0, 8);
+}
 async function pageHome() {
   skeleton();
-  const deals = await allDeals(30);
+  const [deals, sc, bonds, cl, dh] = await Promise.all([allDeals(30), read("sellerCount").catch(() => null), read("totalBonds").catch(() => null), read("totalClaimable").catch(() => null), read("depositsHeld").catch(() => null)]);
   const open = deals.filter(d => N(d.status) === ST.OPEN);
-  view(`<h1>Buy from <span class="grad">bonded</span> sellers.</h1>
-  <p class="mut">Pay the seller the way you always do. If they don't deliver, their ETH bond pays you back. Disputes are decided from the evidence both sides submit.</p>
-  <div class="row"><a class="btn sm" href="#/become">Become a seller</a><a class="btn sm sec" href="#/how">How it works</a></div>
+  const resolved = deals.filter(d => N(d.status) === ST.RESOLVED).length;
+  const completed = deals.filter(d => N(d.status) === ST.COMPLETED).length;
+  const feed = feedItems(deals);
+  const tracked = bonds != null ? `Tracked: ${eth(bonds)} ETH bonds · ${eth(cl || 0)} claimable · ${eth(dh || 0)} deposits` : "";
+  view(`<span class="live on"><i></i>Live on ${S.net === "mainnet" ? "Base" : "Base Sepolia"}</span>
+  <section class="hero"><div>
+    <h1>Buy from sellers who put money behind their word.</h1>
+    <p class="lede">Pay the seller the way you always do. If they don't deliver, their locked ETH bond pays you back. Disputes are decided from the evidence both sides submit.</p>
+    <div class="row"><a class="btn" href="#/become">Become a seller</a><a class="btn sec" href="#/how">How it works</a></div>
+  </div>${ART}</section>
+  <div class="stats">
+    <div class="stat"><b>${open.length}</b><span>Open offers</span><small>${deals.length} deals loaded</small></div>
+    <div class="stat"><b>${sc != null ? N(sc) : "—"}</b><span>Bonded sellers</span><small>${bonds != null ? eth(bonds) : "—"} ETH locked in bonds</small></div>
+    <div class="stat"><b>${completed}</b><span>Completed deals</span><small>buyer-confirmed or auto</small></div>
+    <div class="stat"><b>${resolved}</b><span>Disputes resolved</span><small>by the arbiter</small></div>
+  </div>
+  <h2>What do you want to do?</h2>
+  <div class="chips"><a class="chip" href="#/">Buy from an open offer</a><a class="chip" href="#/become">Sell with a bond</a><a class="chip" href="#/me">Follow up a dispute</a></div>
+  <div class="roles">
+    <a class="role" href="#/"><span class="tile">${RICON.buy}</span><span><b>Buyer</b><br><span class="mut">Browse protected offers</span></span><span class="arrow">›</span></a>
+    <a class="role" href="#/become"><span class="tile">${RICON.sell}</span><span><b>Seller</b><br><span class="mut">Lock a bond, list deals</span></span><span class="arrow">›</span></a>
+    <a class="role" href="#/me"><span class="tile">${RICON.court}</span><span><b>Disputes</b><br><span class="mut">Evidence and rulings</span></span><span class="arrow">›</span></a>
+  </div>
+  <h2>Live contract activity</h2>
+  <div class="card feed">${feed.length ? feed.map(([tm, txt, id]) => `<div class="item"><span class="dot"></span><div class="grow"><a href="#/deal/${esc(id)}" style="color:var(--tx)">${txt}</a><div class="mut" style="font-size:.8rem">${ago(tm)}</div></div></div>`).join("") : '<div class="empty">No activity yet.</div>'}
+  ${tracked ? `<div class="mut" style="font-size:.8rem;margin-top:8px">${esc(tracked)}</div>` : ""}</div>
+  <details class="card"><summary>How it works in four steps</summary><div class="how4" style="margin-top:10px">
+    <div class="card"><span class="n">1</span><h3>Bond</h3><span class="mut">The seller locks ETH.</span></div>
+    <div class="card"><span class="n">2</span><h3>Pay</h3><span class="mut">The buyer pays off-chain and claims.</span></div>
+    <div class="card"><span class="n">3</span><h3>Deliver</h3><span class="mut">Proof, then confirmation.</span></div>
+    <div class="card"><span class="n">4</span><h3>Dispute</h3><span class="mut">Evidence, then a ruling.</span></div></div></details>
   <h2>Open offers <span class="mut">(${open.length})</span></h2>
   ${open.length ? open.map(dealCard).join("") : '<div class="empty">No open offers yet.</div>'}
-  <h2>Recent activity</h2>
-  ${deals.filter(d => N(d.status) !== ST.OPEN).map(dealCard).join("") || '<div class="empty">Nothing yet.</div>'}`);
+  <h2>Latest deals</h2>
+  ${deals.filter(d => N(d.status) !== ST.OPEN).slice(0, 6).map(dealCard).join("") || '<div class="empty">Nothing yet.</div>'}`);
 }
 
 async function pageSellers() {
@@ -450,7 +622,7 @@ async function pageNew() {
 
 async function pageBecome() {
   const p = await params();
-  view(`<h1>Become a <span class="grad">bonded</span> seller</h1>
+  view(`<h1>Become a <span class="sig">bonded</span> seller</h1>
   <p class="mut">Lock ETH as a bond. If you fail to deliver and lose a dispute, buyers are paid from it.</p>
   <div class="card">
   <div class="row between"><span>STARTER</span><span class="mut">${eth(p.MIN_BOND)}+ ETH · up to ${eth(p.MAX_PROTECT_STARTER)} per deal</span></div>
