@@ -25,7 +25,7 @@ Buyers pay the seller off-chain, the way they already do. The seller has locked 
 1. Open GenLayer Studio, create a new file, paste `contracts/bondmark_testnet.py` (use `bondmark.py` for real time windows), deploy with no arguments.
 2. Open `frontend/index.html?c=<contract address>` or set the address under Settings.
 
-The contract has not been exercised on a real GenVM by this repository's tests. The offline stub checks logic and accounting, not GenVM behavior.
+The offline stub checks logic and accounting. The testnet variant was also exercised on GenLayer Studio (contract 0x63cd0550A3e4d0a2cf38A51aA611cCBaD6aF5182); see Honest limits for what was and was not covered.
 
 ## Base version
 
@@ -35,7 +35,7 @@ Same deal flow, with ETH bonds. Differences from the GenLayer version:
 - Deals bound by seller silence cap compensation at 25%, need the arbiter's `paymentEvidenceReviewed` flag, and pay out only after a 7-day window in which the seller can challenge. Claiming a payment needs a refundable deposit (see ARCHITECTURE.md).
 - Invalid input reverts normally (ETH is returned by the EVM), so no refund-instead-of-revert path.
 - Constants are scaled to ETH (min bond 0.005, protect cap 0.002 / 0.01 / 0.04, dispute deposit 0.001). Constructor takes `(arbiter, timeUnit)`; use 3600 for real windows, 5 for fast tests.
-- The Solidity code and Foundry tests were written without a compiler available and have not been compiled or run by the author. The included `base-tests.yml` workflow runs `forge build` and `forge test` in CI; fix whatever it reports before deploying anything.
+- The Solidity code compiles and the Foundry tests pass in CI (`base-tests.yml`). It has not been deployed to a live chain and has not been audited.
 - The arbiter should be a multisig contract; the deploy script refuses an EOA unless `ALLOW_EOA_ARBITER=true` (testnet only). Arbiter changes are timelocked 7 days (`proposeArbiter`, `applyArbiterChange`).
 - Deploy: `cd base && ARBITER=0x... forge script script/Deploy.s.sol --rpc-url https://sepolia.base.org --account <keystore> --broadcast`, then open `frontend/base.html?c=<address>&n=sepolia`.
 - Mini app: host `frontend/` over https, replace `APP_URL` in `base.html` and `.well-known/farcaster.json`, and sign the account association with Base Build. The mini app is untested.
