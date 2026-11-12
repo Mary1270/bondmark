@@ -46,5 +46,7 @@ Same deal flow, with ETH bonds. Differences from the GenLayer version:
 - Instagram handles are self-declared labels, not verified.
 - Validators are language models and can be wrong. No appeal in v1.
 - Compensation is in GEN and covers the protected amount, not necessarily the price.
+- Links are never opened. When the seller stays silent, a text-only payment claim was rejected as insufficient in live Studio tests, so the buyer gets the deposits back but no compensation.
+- Live Studio runs covered the confirmed-seller and silent-seller paths and the accounting balance. The payout delay and seller challenge are covered by the offline tests only.
 
 MIT licensed.
