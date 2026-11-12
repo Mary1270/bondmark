@@ -5,13 +5,13 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>BondMark</title>
 <meta name="description" content="Seller bonds and on-chain dispute arbitration for social commerce, built on GenLayer.">
-<meta name="theme-color" content="#0B7A6B">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230B7A6B'/%3E%3Cpath d='M16 5l9 4v7c0 5-4 9-9 11-5-2-9-6-9-11V9z' fill='none' stroke='white' stroke-width='2.4'/%3E%3Cpath d='M12 16l3 3 5-6' fill='none' stroke='white' stroke-width='2.4'/%3E%3C/svg%3E">
+<meta name="theme-color" content="#0052FF">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230052FF'/%3E%3Cpath d='M16 5l9 4v7c0 5-4 9-9 11-5-2-9-6-9-11V9z' fill='none' stroke='white' stroke-width='2.4'/%3E%3Cpath d='M12 16l3 3 5-6' fill='none' stroke='white' stroke-width='2.4'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#F5F7F8;--surface:#FFFFFF;--surface2:#EEF2F3;--line:#DDE3E6;--tx:#12181C;--mut:#56626B;--sig:#0B7A6B;--sig-ink:#FFFFFF;--sig-soft:#E1F3F0;--ok:#16794F;--warn:#9A6200;--bad:#B3261E;--shadow:0 1px 2px rgba(16,24,28,.06),0 4px 14px rgba(16,24,28,.06);--r:12px;--pri:var(--sig);--teal:var(--sig);--bg2:var(--surface2);--card:var(--surface)}
-:root[data-theme=dark]{--bg:#0E1417;--surface:#151D21;--surface2:#1B262B;--line:#26343A;--tx:#E8EEF0;--mut:#9AA9B0;--sig:#3DD6BD;--sig-ink:#06201B;--sig-soft:#123A35;--ok:#4FD39A;--warn:#F0B54A;--bad:#FF8A80;--shadow:0 1px 2px rgba(0,0,0,.4),0 4px 14px rgba(0,0,0,.3)}
+:root{--bg:#F5F7F8;--surface:#FFFFFF;--surface2:#EEF2F3;--line:#DDE3E6;--tx:#12181C;--mut:#56626B;--sig:#0052FF;--sig-ink:#FFFFFF;--sig-soft:#E5EDFF;--acc:#D62976;--acc-soft:#FCE6EF;--org:#C2570A;--org-soft:#FFEBD9;--ok:#16794F;--warn:#9A6200;--bad:#B3261E;--shadow:0 1px 2px rgba(16,24,28,.06),0 4px 14px rgba(16,24,28,.06);--r:12px;--pri:var(--sig);--teal:var(--sig);--bg2:var(--surface2);--card:var(--surface)}
+:root[data-theme=dark]{--bg:#0E1417;--surface:#151D21;--surface2:#1B262B;--line:#26343A;--tx:#E8EEF0;--mut:#9AA9B0;--sig:#6E96FF;--sig-ink:#06143D;--sig-soft:#16224D;--acc:#FF5C9A;--acc-soft:#3B1627;--org:#FFA94D;--org-soft:#3A2410;--ok:#4FD39A;--warn:#F0B54A;--bad:#FF8A80;--shadow:0 1px 2px rgba(0,0,0,.4),0 4px 14px rgba(0,0,0,.3)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 html,body{margin:0;background:var(--bg);color:var(--tx);font-family:'Public Sans',system-ui,-apple-system,Segoe UI,sans-serif;font-size:16px;line-height:1.5}
@@ -98,6 +98,8 @@ code{font-family:ui-monospace,Menlo,monospace;font-size:.85em;background:var(--s
 .role:hover{border-color:var(--sig);text-decoration:none}
 .tile{width:48px;height:48px;border-radius:12px;background:var(--sig-soft);display:flex;align-items:center;justify-content:center;flex:none}
 .tile svg{width:26px;height:26px;stroke:var(--sig);fill:none;stroke-width:1.8}
+.tile.a{background:var(--acc-soft)}.tile.a svg{stroke:var(--acc)}.tile.o{background:var(--org-soft)}.tile.o svg{stroke:var(--org)}
+.feed .dot.a{background:var(--acc)}.how4 .card:nth-child(2) .n{background:var(--acc-soft);color:var(--acc)}.how4 .card:nth-child(4) .n{background:var(--org-soft);color:var(--org)}
 .role .arrow{margin-left:auto;color:var(--sig);font-size:1.3rem}
 .chips{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
 .chip{border:1px solid var(--line);background:var(--surface);color:var(--tx);border-radius:99px;padding:8px 14px;font-size:.95rem;min-height:38px;display:inline-flex;align-items:center}
@@ -124,7 +126,7 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
 </head>
 <body>
 <header class="top"><div class="bar">
-<a class="logo" href="#/"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3l11 5v8c0 6-5 10-11 13C10 26 5 22 5 16V8z" fill="none" stroke="var(--sig)" stroke-width="2.4"/><path d="M11 16l4 4 6-8" fill="none" stroke="var(--sig)" stroke-width="2.6"/></svg>BondMark</a>
+<a class="logo" href="#/"><svg viewBox="0 0 32 32" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#0052FF"/><stop offset=".55" stop-color="#D62976"/><stop offset="1" stop-color="#FA7E1E"/></linearGradient></defs><path d="M16 3l11 5v8c0 6-5 10-11 13C10 26 5 22 5 16V8z" fill="none" stroke="url(#lg)" stroke-width="2.6"/><path d="M11 16l4 4 6-8" fill="none" stroke="url(#lg)" stroke-width="2.8"/></svg>BondMark</a>
 <div class="grow"></div>
 <button class="iconbtn" id="themebtn" aria-label="Toggle light and dark theme"><svg viewBox="0 0 24 24"><path d="M21 13A9 9 0 1111 3a7 7 0 0010 10z"/></svg></button>
 <button class="btn sm sec" id="wbtn">Connect</button>
@@ -393,7 +395,7 @@ function sellerCard(s) {
     <div class="mut" style="font-size:.85rem;margin-top:6px">Can protect up to <b style="color:var(--teal)">${fmtGen(s.available_protection)} GEN</b> now · ${s.completed_verified + s.completed_auto} completed · ${s.disputes_lost} lost</div></a>`;
 }
 
-const ART = '<svg class="art" viewBox="0 0 320 220" aria-hidden="true"><rect x="20" y="40" width="280" height="150" rx="14" fill="var(--surface)" stroke="var(--line)"/><rect x="40" y="62" width="110" height="12" rx="6" fill="var(--sig-soft)"/><rect x="40" y="86" width="190" height="8" rx="4" fill="var(--line)"/><rect x="40" y="104" width="150" height="8" rx="4" fill="var(--line)"/><path d="M235 118l32 14v22c0 15-12 26-32 32-20-6-32-17-32-32v-22z" fill="var(--sig-soft)" stroke="var(--sig)" stroke-width="3"/><path d="M222 150l9 9 17-20" fill="none" stroke="var(--sig)" stroke-width="4" stroke-linecap="round"/><circle cx="62" cy="158" r="16" fill="var(--sig-soft)" stroke="var(--sig)" stroke-width="2"/><text x="62" y="164" text-anchor="middle" font-size="16" font-weight="700" fill="var(--sig)">G</text></svg>';
+const ART = '<svg class="art" viewBox="0 0 320 220" aria-hidden="true"><rect x="20" y="40" width="280" height="150" rx="14" fill="var(--surface)" stroke="var(--line)"/><rect x="40" y="62" width="110" height="12" rx="6" fill="var(--sig-soft)"/><rect x="40" y="86" width="190" height="8" rx="4" fill="var(--line)"/><rect x="40" y="104" width="150" height="8" rx="4" fill="var(--line)"/><path d="M235 118l32 14v22c0 15-12 26-32 32-20-6-32-17-32-32v-22z" fill="var(--sig-soft)" stroke="var(--sig)" stroke-width="3"/><path d="M222 150l9 9 17-20" fill="none" stroke="var(--sig)" stroke-width="4" stroke-linecap="round"/><circle cx="62" cy="158" r="16" fill="var(--acc-soft)" stroke="var(--acc)" stroke-width="2"/><text x="62" y="164" text-anchor="middle" font-size="16" font-weight="700" fill="var(--acc)">B</text><rect x="170" y="62" width="60" height="12" rx="6" fill="var(--org-soft)"/></svg>';
 const RICON = {
   buy: '<svg viewBox="0 0 24 24"><path d="M5 7h14l-1.500 11H6.500z"/><path d="M9 7a3 3 0 016 0"/></svg>',
   sell: '<svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.500 8-8 9-4.500-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg>',
@@ -434,8 +436,8 @@ async function pageHome() {
   <div class="chips"><a class="chip" href="#/">Buy from an open offer</a><a class="chip" href="#/become">Sell with a bond</a><a class="chip" href="#/me">Follow up a dispute</a></div>
   <div class="roles">
     <a class="role" href="#/"><span class="tile">${RICON.buy}</span><span><b>Buyer</b><br><span class="mut">Browse protected offers</span></span><span class="arrow">›</span></a>
-    <a class="role" href="#/become"><span class="tile">${RICON.sell}</span><span><b>Seller</b><br><span class="mut">Lock a bond, list deals</span></span><span class="arrow">›</span></a>
-    <a class="role" href="#/me"><span class="tile">${RICON.court}</span><span><b>Disputes</b><br><span class="mut">Evidence and rulings</span></span><span class="arrow">›</span></a>
+    <a class="role" href="#/become"><span class="tile a">${RICON.sell}</span><span><b>Seller</b><br><span class="mut">Lock a bond, list deals</span></span><span class="arrow">›</span></a>
+    <a class="role" href="#/me"><span class="tile o">${RICON.court}</span><span><b>Disputes</b><br><span class="mut">Evidence and rulings</span></span><span class="arrow">›</span></a>
   </div>
   <h2>Live contract activity</h2>
   <div class="card feed">${feed.length ? feed.map(([t, txt, id]) => `<div class="item"><span class="dot"></span><div class="grow"><a href="#/deal/${esc(id)}" style="color:var(--tx)">${txt}</a><div class="mut" style="font-size:.8rem">${ago(t)}</div></div></div>`).join("") : '<div class="empty">No activity yet.</div>'}
