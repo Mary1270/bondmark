@@ -32,7 +32,7 @@ The contract has not been exercised on a real GenVM by this repository's tests. 
 Same deal flow, with ETH bonds. Differences from the GenLayer version:
 
 - No AI judge. A designated `arbiter` address (set by the owner, ideally a multisig) rules after the evidence window. If it stays silent for 7 days anyone can close the dispute as inconclusive (no payout, deposits returned).
-- Deals bound by seller silence cap compensation at 25%, need the arbiter's `paymentEvidenceReviewed` flag, and pay out only after a 7-day window in which the seller can challenge. Claiming a payment needs a refundable deposit (see ARCHITECTURE.md). A seller's total compensation per week is also capped.
+- Deals bound by seller silence cap compensation at 25%, need the arbiter's `paymentEvidenceReviewed` flag, and pay out only after a 7-day window in which the seller can challenge. Claiming a payment needs a refundable deposit (see ARCHITECTURE.md).
 - Invalid input reverts normally (ETH is returned by the EVM), so no refund-instead-of-revert path.
 - Constants are scaled to ETH (min bond 0.005, protect cap 0.002 / 0.01 / 0.04, dispute deposit 0.001). Constructor takes `(arbiter, timeUnit)`; use 3600 for real windows, 5 for fast tests.
 - The Solidity code and Foundry tests were written without a compiler available and have not been compiled or run by the author. The included `base-tests.yml` workflow runs `forge build` and `forge test` in CI; fix whatever it reports before deploying anything.
